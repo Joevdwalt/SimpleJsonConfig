@@ -62,8 +62,16 @@ namespace SimpleJsonConfig.Test
             Assert.AreEqual(expectedValue.Surname, actualValue.Surname);
         }
 
+        [TestMethod]
+        public void GetSetting_KeyDoesNotExits()
+        {
+            var configReader = new ConfigReader();
+            string expectedValue = null;
+            var actualValue = configReader.GetSetting<string>("DoesNotExit");
 
-
+            Assert.AreEqual(actualValue, expectedValue);
+        
+        }
 
         public class Person
         {

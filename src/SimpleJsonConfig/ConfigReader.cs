@@ -43,7 +43,7 @@ namespace SimpleJsonConfig
         }
 
         /// <summary>
-        /// Gets the setting.
+        /// Gets the setting. If the key is not found will return null.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key">The key.</param>
@@ -67,7 +67,13 @@ namespace SimpleJsonConfig
                     {
                         var jsonString = streamReader.ReadToEnd();
                         var jsonObject = JObject.Parse(jsonString);
-                        var result = jsonObject.SelectToken(key).ToObject<T>();
+                        var token = jsonObject.SelectToken(key);
+                        var result = default(T);
+
+                        if (token != null)
+                        {
+                             result = jsonObject.SelectToken(key).ToObject<T>();
+                        }
 
                         streamReader.Close();
                         return result;
