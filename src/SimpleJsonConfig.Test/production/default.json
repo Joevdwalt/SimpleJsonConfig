@@ -1,0 +1,7 @@
+﻿{
+    "TestKey": "TestValue",
+    "TestObjectKey": {
+        name: "foo",
+        surname: "bar"
+    }
+}
