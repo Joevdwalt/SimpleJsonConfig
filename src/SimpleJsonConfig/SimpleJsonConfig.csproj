@@ -51,6 +51,9 @@
   <ItemGroup>
     <Compile Include="ConfigReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\DefaultJsonSourceProvider.cs" />
+    <Compile Include="Providers\EmbeddedResourceJsonProvider.cs" />
+    <Compile Include="Providers\IJsonSourceProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Exceptions\" />

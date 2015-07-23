@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using SimpleJsonConfig.Providers;
 
 namespace SimpleJsonConfig
 {
@@ -19,27 +20,16 @@ namespace SimpleJsonConfig
     /// </summary>
     public class ConfigReader
     {
+        private IJsonSourceProvider _jsonSourceProvider;
 
-        private const string ConfEnv = "ConfEnv";
-        private const string FileExtention = ".json";
-        private const string DefaultEnviroment = "default";
-
-        /// <summary>
-        /// Gets the setting. This method will return settings from the dev enviroment file assuming that the environment is development. 
-        /// For production environments set the ConfEnv = "Production" or similair to read the production configuration.
-        /// </summary>
-        /// <typeparam name="T">The returning type of the key.</typeparam>
-        /// <param name="key">The key to look for</param>
-        /// <returns>The value of the key.</returns>
-        public T GetSetting<T>(string key) where T : class
+        public ConfigReader()
         {
-            var configEnv = Environment.GetEnvironmentVariable(ConfEnv);
-            if (string.IsNullOrEmpty(configEnv))
-            {
-                configEnv = DefaultEnviroment;
-            }
+            _jsonSourceProvider = new DefaultJsonSourceProvider();
+        }
 
-            return GetSetting<T>(key, configEnv);
+        public ConfigReader(IJsonSourceProvider _jsonSource)
+        {
+            _jsonSourceProvider = _jsonSource;
         }
 
         /// <summary>
@@ -50,37 +40,25 @@ namespace SimpleJsonConfig
         /// <param name="environment">The environment.</param>
         /// <returns></returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public T GetSetting<T>(string key, string environment)
+        public T GetSetting<T>(string key)
         {
-            // Look for default folder and dev or development folders
-            var currentPath = Environment.CurrentDirectory;
-            var enviromentPath = environment.ToLower();
-
-            var path = string.Format("{0}\\{1}", currentPath, enviromentPath);
-
-            if (Directory.Exists(path))
+            var stream = _jsonSourceProvider.GetJsonStream();
+            if (stream == null) return default(T);
+            using (var streamReader = new StreamReader(_jsonSourceProvider.GetJsonStream()))
             {
-                var files = Directory.GetFiles(path);
-                foreach (var file in from file in files let extension = Path.GetExtension(file) where extension != null && extension.ToLower().Equals(FileExtention.ToLower()) select file)
+                var jsonString = streamReader.ReadToEnd();
+                var jsonObject = JObject.Parse(jsonString);
+                var token = jsonObject.SelectToken(key);
+                var result = default(T);
+
+                if (token != null)
                 {
-                    using (var streamReader = new StreamReader(file))
-                    {
-                        var jsonString = streamReader.ReadToEnd();
-                        var jsonObject = JObject.Parse(jsonString);
-                        var token = jsonObject.SelectToken(key);
-                        var result = default(T);
-
-                        if (token != null)
-                        {
-                             result = jsonObject.SelectToken(key).ToObject<T>();
-                        }
-
-                        streamReader.Close();
-                        return result;
-                    }
+                    result = jsonObject.SelectToken(key).ToObject<T>();
                 }
+
+                streamReader.Close();
+                return result;
             }
-            return default(T);
         }
     }
 }
