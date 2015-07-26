@@ -67,11 +67,22 @@ namespace SimpleJsonConfig.Test
         public void GetSetting_KeyDoesNotExits()
         {
             var configReader = new ConfigReader();
+
             string expectedValue = null;
             var actualValue = configReader.GetSetting<string>("DoesNotExit");
 
             Assert.AreEqual(actualValue, expectedValue);
-        
+        }
+
+        [TestMethod]
+        public void GetSetting_RootFolderSpecified()
+        {
+            Environment.SetEnvironmentVariable("RootFolder", "Config");
+            var configReader = new ConfigReader();
+            string expectedValue = "TestValueInCustomRootConfig";
+            var actualValue = configReader.GetSetting<string>("TestKey");
+
+            Assert.AreEqual(expectedValue, actualValue);
         }
 
         public class Person

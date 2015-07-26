@@ -1,0 +1,7 @@
+﻿{
+    "TestKey": "TestValueInCustomRootConfig",
+    "TestObjectKey": {
+        name: "foo",
+        surname: "bar"
+    }
+}
