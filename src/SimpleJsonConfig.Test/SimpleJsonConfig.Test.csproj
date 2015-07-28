@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -58,6 +59,7 @@
     <Compile Include="PathProvider\PathProviderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConfigReaderTests.cs" />
+    <Compile Include="HttpClientSourceProviderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimpleJsonConfig\SimpleJsonConfig.csproj">
