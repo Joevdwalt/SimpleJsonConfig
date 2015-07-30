@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SimpleJsonConfig.Providers;
 
 namespace SimpleJsonConfig.Test
 {
@@ -68,10 +67,9 @@ namespace SimpleJsonConfig.Test
         {
             var configReader = new ConfigReader();
 
-            string expectedValue = null;
             var actualValue = configReader.GetSetting<string>("DoesNotExit");
 
-            Assert.AreEqual(actualValue, expectedValue);
+            Assert.AreEqual(actualValue, null);
         }
 
         [TestMethod]

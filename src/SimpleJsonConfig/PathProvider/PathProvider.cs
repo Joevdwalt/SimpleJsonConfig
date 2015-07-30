@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SimpleJsonConfig
+namespace SimpleJsonConfig.PathProvider
 {
     public class PathProvider
     {
@@ -14,7 +10,7 @@ namespace SimpleJsonConfig
         private string rootPath;
 
         /// <summary>
-        /// Gets or sets the current path. This path is the local assembly path but can be overwritted by setting this property.
+        /// Gets or sets the current path. This path is the local assembly path but can be overwritten by setting this property.
         /// </summary>
         /// <value>
         /// The current path.

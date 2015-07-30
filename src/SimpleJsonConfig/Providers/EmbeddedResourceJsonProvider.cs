@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Reflection;
 
 namespace SimpleJsonConfig.Providers
 {
@@ -13,15 +9,15 @@ namespace SimpleJsonConfig.Providers
     /// </summary>
     public class EmbeddedResourceJsonProvider : IJsonSourceProvider
     {
-        private Type _typeInAssembly;
-        private string _nameSpace;
-        private string _resourceName;
+        private readonly Type _typeInAssembly;
+        private readonly string _nameSpace;
+        private readonly string _resourceName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbeddedResourceJsonProvider"/> class.
         /// </summary>
         /// <param name="typeInAssembly">The type in the assembly to look for. </param>
-        /// <param name="nameSpace">The name space of the type you will be deserialising</param>
+        /// <param name="nameSpace">The name space of the type you will be de-serialising</param>
         /// <param name="resourceName">Name of the resource. </param>
         public EmbeddedResourceJsonProvider(Type typeInAssembly, string nameSpace, string resourceName)
         {
@@ -32,7 +28,7 @@ namespace SimpleJsonConfig.Providers
 
         /// <summary>
         /// Gets the json stream. This will look for the config files as per the parameters specified by the
-        /// contructor arguments.
+        /// contractor arguments.
         /// </summary>
         /// <returns></returns>
         public Stream GetJsonStream()
@@ -40,6 +36,11 @@ namespace SimpleJsonConfig.Providers
             var resourceName = String.Format("{0}.{1}", _nameSpace, _resourceName);
             var stream = _typeInAssembly.Assembly.GetManifestResourceStream(resourceName);
             return stream;
+        }
+
+        public Task<Stream> GetJsonStreamAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

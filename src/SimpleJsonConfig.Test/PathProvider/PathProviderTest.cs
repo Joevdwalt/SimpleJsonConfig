@@ -1,26 +1,27 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SimpleJsonConfig.Test
+namespace SimpleJsonConfig.Test.PathProvider
 {
     [TestClass]
     public class PathProviderTest
     {
 
-        PathProvider PathProvider { get; set; }
+        SimpleJsonConfig.PathProvider.PathProvider PathProvider { get; set; }
 
         public PathProviderTest()
         {
-            this.PathProvider = new PathProvider();
+            this.PathProvider = new SimpleJsonConfig.PathProvider.PathProvider
+            {
+                CurrentPath = "foo"
+            };
             //override base for testing
-            this.PathProvider.CurrentPath = "foo";
         }
 
         [TestMethod]
         public void GetConfigPath_DefaultFolder()
         {
-            var expectedPath = "foo\\default";
-            var environment = "default";
+            const string expectedPath = "foo\\default";
+            const string environment = "default";
 
             var actualPath = this.PathProvider.GetConfigPath(environment);
 
@@ -30,11 +31,12 @@ namespace SimpleJsonConfig.Test
         [TestMethod]
         public void GetConfigPath_RootDefaultFolder()
         {
-            this.PathProvider = new SimpleJsonConfig.PathProvider();
-            this.PathProvider.RootPath = "root";
-            this.PathProvider.CurrentPath = "foo";
-            var expectedPath = "foo\\root\\default";
-            var environment = "default";
+            this.PathProvider = new SimpleJsonConfig.PathProvider.PathProvider
+            {
+                RootPath = "root", CurrentPath = "foo"
+            };
+            const string expectedPath = "foo\\root\\default";
+            const string environment = "default";
             var actualPath = this.PathProvider.GetConfigPath(environment);
 
             Assert.AreEqual(expectedPath, actualPath);

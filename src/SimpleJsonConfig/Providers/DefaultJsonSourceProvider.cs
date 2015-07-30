@@ -18,9 +18,9 @@ namespace SimpleJsonConfig.Providers
         private const string DefaultEnviroment = "default";
 
 
-        private PathProvider PathProvider { get; set; }
+        private PathProvider.PathProvider PathProvider { get; set; }
 
-        public DefaultJsonSourceProvider(PathProvider pathProvider)
+        public DefaultJsonSourceProvider(PathProvider.PathProvider pathProvider)
         {
             this.PathProvider = pathProvider;
 
@@ -28,7 +28,7 @@ namespace SimpleJsonConfig.Providers
 
         public DefaultJsonSourceProvider()
         {
-            this.PathProvider = new PathProvider();
+            this.PathProvider = new PathProvider.PathProvider();
         }
 
         public Stream GetJsonStream()
@@ -56,7 +56,9 @@ namespace SimpleJsonConfig.Providers
             return null;
         }
 
-
-
+        public Task<Stream> GetJsonStreamAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
