@@ -9,6 +9,17 @@ namespace SimpleJsonConfig.Test
         [TestMethod]
         public void GetSetting_NoEnviroment_TypeOfString()
         {
+            if (Environment.GetEnvironmentVariable("ConfEnv") != null)
+            {
+                Environment.SetEnvironmentVariable("ConfEnv", null);
+            }
+
+            if (Environment.GetEnvironmentVariable("RootFolder") != null)
+            {
+                Environment.SetEnvironmentVariable("RootFolder", null);
+            }
+            
+
             var configReader = new ConfigReader();
             const string expectedValue = "TestValue";
             var actualValue = configReader.GetSetting<string>("TestKey");
@@ -19,6 +30,12 @@ namespace SimpleJsonConfig.Test
         [TestMethod]
         public void GetSetting_NoEnviroment_TypeOfPerson()
         {
+            //Explicitly Remove eniroment 
+            if (Environment.GetEnvironmentVariable("ConfEnv") != null)
+            {
+                Environment.SetEnvironmentVariable("ConfEnv", null);
+            }
+
             var configReader = new ConfigReader();
             var expectedValue = new Person
             {
@@ -35,6 +52,17 @@ namespace SimpleJsonConfig.Test
         [TestMethod]
         public void GetSetting_Production_TypeOfString()
         {
+            if (Environment.GetEnvironmentVariable("ConfEnv") != null)
+            {
+                Environment.SetEnvironmentVariable("ConfEnv", null);
+            }
+
+            if (Environment.GetEnvironmentVariable("RootFolder") != null)
+            {
+                Environment.SetEnvironmentVariable("RootFolder", null);
+            }
+            
+
             Environment.SetEnvironmentVariable("ConfEnv", "Production");
 
             var configReader = new ConfigReader();
@@ -47,6 +75,11 @@ namespace SimpleJsonConfig.Test
         [TestMethod]
         public void GetSetting_Production_TypeOfPerson()
         {
+            if (Environment.GetEnvironmentVariable("ConfEnv") != null)
+            {
+                Environment.SetEnvironmentVariable("ConfEnv", null);
+            }
+
             Environment.SetEnvironmentVariable("ConfEnv", "Production");
 
             var configReader = new ConfigReader();
@@ -75,7 +108,19 @@ namespace SimpleJsonConfig.Test
         [TestMethod]
         public void GetSetting_RootFolderSpecified()
         {
-            Environment.SetEnvironmentVariable("RootFolder", "Config");
+
+            if (Environment.GetEnvironmentVariable("ConfEnv") != null)
+            {
+                Environment.SetEnvironmentVariable("ConfEnv", null);
+            }
+
+            if (Environment.GetEnvironmentVariable("RootFolder") != null)
+            {
+                Environment.SetEnvironmentVariable("RootFolder", null);
+            }
+            
+
+            Environment.SetEnvironmentVariable("RootFolder", "config");
             var configReader = new ConfigReader();
             string expectedValue = "TestValueInCustomRootConfig";
             var actualValue = configReader.GetSetting<string>("TestKey");
