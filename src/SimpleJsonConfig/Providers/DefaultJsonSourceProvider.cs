@@ -36,24 +36,34 @@ namespace SimpleJsonConfig.Providers
             // Look for default folder and dev or development folders
             var environment = Environment.GetEnvironmentVariable(ConfEnv);
             environment = String.IsNullOrEmpty(environment) ? DefaultEnviroment : environment;
-           
+
             var rootFolder = Environment.GetEnvironmentVariable(RootFolder);
             this.PathProvider.RootPath = rootFolder;
-           
+
             var enviromentPath = environment.ToLower();
             var path = this.PathProvider.GetConfigPath(enviromentPath);
+
+            var streams = new List<Stream>();
 
             if (Directory.Exists(path))
             {
                 var files = Directory.GetFiles(path);
                 foreach (var file in from file in files let extension = Path.GetExtension(file) where extension != null && extension.ToLower().Equals(FileExtention.ToLower()) select file)
                 {
+
                     var fileStream = File.OpenRead(file);
-                    return fileStream;
+                    streams.Add(fileStream);
                 }
             }
 
-            return null;
+            if (streams.Count() == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return new CombinationStream(streams);
+            }
         }
 
         public Task<Stream> GetJsonStreamAsync()

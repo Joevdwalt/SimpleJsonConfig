@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Stream\CombinationStream.cs" />
     <Compile Include="ConfigReader.cs" />
     <Compile Include="PathProvider\PathProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

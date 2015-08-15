@@ -13,23 +13,23 @@ namespace SimpleJsonConfig
         /// <summary>
         /// The json source provider
         /// </summary>
-        private readonly IJsonSourceProvider _jsonSourceProvider;
+        private readonly IJsonSourceProvider jsonSourceProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigReader"/> class.
         /// </summary>
         public ConfigReader()
         {
-            this._jsonSourceProvider = new DefaultJsonSourceProvider();
+            this.jsonSourceProvider = new DefaultJsonSourceProvider();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigReader"/> class.
         /// </summary>
         /// <param name="_jsonSource">The _json source.</param>
-        public ConfigReader(IJsonSourceProvider _jsonSource)
+        public ConfigReader(IJsonSourceProvider jsonSource)
         {
-            this._jsonSourceProvider = _jsonSource;
+            this.jsonSourceProvider = jsonSource;
         }
 
         /// <summary>
@@ -40,9 +40,9 @@ namespace SimpleJsonConfig
         /// <returns></returns>
         public T GetSetting<T>(string key)
         {
-            var stream = _jsonSourceProvider.GetJsonStream();
+            var stream = jsonSourceProvider.GetJsonStream();
             if (stream == null) return default(T);
-            using (var streamReader = new StreamReader(_jsonSourceProvider.GetJsonStream()))
+            using (var streamReader = new StreamReader(jsonSourceProvider.GetJsonStream()))
             {
                 var jsonString = streamReader.ReadToEnd();
                 var jsonObject = JObject.Parse(jsonString);
@@ -67,7 +67,7 @@ namespace SimpleJsonConfig
         /// <returns></returns>
         public async Task<T> GetSettingAsync<T>(string key)
         {
-            var stream = await this._jsonSourceProvider.GetJsonStreamAsync();
+            var stream = await this.jsonSourceProvider.GetJsonStreamAsync();
             if (stream == null || stream == Stream.Null) return default(T);
 
             using (var streamReader = new StreamReader(stream))
