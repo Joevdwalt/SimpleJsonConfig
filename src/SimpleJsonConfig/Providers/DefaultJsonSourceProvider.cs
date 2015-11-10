@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 
 namespace SimpleJsonConfig.Providers
@@ -44,6 +45,11 @@ namespace SimpleJsonConfig.Providers
             var path = this.PathProvider.GetConfigPath(enviromentPath);
 
             var streams = new List<Stream>();
+
+            Trace.TraceInformation("Environment: {0}", environment);
+            Trace.TraceInformation("RootFolder: {0}", rootFolder);
+            Trace.TraceInformation("Path: {0}", path);
+
 
             if (Directory.Exists(path))
             {

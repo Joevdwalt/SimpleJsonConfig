@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SimpleJsonConfig.Providers;
+using System.Diagnostics;
+using System;
 
 namespace SimpleJsonConfig
 {
@@ -40,24 +42,31 @@ namespace SimpleJsonConfig
         /// <returns></returns>
         public T GetSetting<T>(string key)
         {
-            var stream = jsonSourceProvider.GetJsonStream();
-            if (stream == null) return default(T);
-            using (var streamReader = new StreamReader(jsonSourceProvider.GetJsonStream()))
+            try
             {
-                var jsonString = streamReader.ReadToEnd();
-
-                
-                var jsonObject = JObject.Parse(jsonString);
-                var token = jsonObject.SelectToken(key);
-                var result = default(T);
-
-                if (token != null)
+                var stream = jsonSourceProvider.GetJsonStream();
+                if (stream == null) return default(T);
+                using (var streamReader = new StreamReader(jsonSourceProvider.GetJsonStream()))
                 {
-                    result = jsonObject.SelectToken(key).ToObject<T>();
-                }
+                    var jsonString = streamReader.ReadToEnd();
 
-                streamReader.Close();
-                return result;
+                    Trace.TraceInformation("Reading value for key: {0}", key);
+                    var jsonObject = JObject.Parse(jsonString);
+                    var token = jsonObject.SelectToken(key);
+                    var result = default(T);
+
+                    if (token != null)
+                    {
+                        result = jsonObject.SelectToken(key).ToObject<T>();
+                    }
+
+                    streamReader.Close();
+                    return result;
+                }
+            }
+            catch (Exception ex) {
+                Trace.TraceError(ex.ToString());
+                throw;
             }
         }
 
