@@ -45,6 +45,8 @@ namespace SimpleJsonConfig
             using (var streamReader = new StreamReader(jsonSourceProvider.GetJsonStream()))
             {
                 var jsonString = streamReader.ReadToEnd();
+
+                
                 var jsonObject = JObject.Parse(jsonString);
                 var token = jsonObject.SelectToken(key);
                 var result = default(T);
