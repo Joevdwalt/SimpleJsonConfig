@@ -53,6 +53,8 @@ namespace SimpleJsonConfig.Providers
 
             if (Directory.Exists(path))
             {
+                Trace.TraceInformation("Looking for config file in {0}", path);
+
                 var files = Directory.GetFiles(path);
                 foreach (var file in from file in files let extension = Path.GetExtension(file) where extension != null && extension.ToLower().Equals(FileExtention.ToLower()) select file)
                 {
