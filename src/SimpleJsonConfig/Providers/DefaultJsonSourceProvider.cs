@@ -11,12 +11,21 @@ using System.Diagnostics;
 
 namespace SimpleJsonConfig.Providers
 {
+
+    /// <summary>
+    /// The Env variables mentioned below do not need to be set. A default configution can be used. Just ensure you have a folder called dev in your bin directory with your config files.
+    /// This class provides the default json source provider. Please note the env variables the class will look at are 
+    /// ConfEnv - The system will look at this variable to determine which environment you are working with. The default is default. The system will look for config files in the lowercase folder that 
+    /// corresponds to this value. IE if this is set to "Development" the system will look at <RootFolder>/development.
+    /// RootFolder - This environment variable is the root folder at which the system should look for finding configuration files. If not specified the system will look at the current directory where the 
+    /// executable is running. 
+    /// </summary>
     public class DefaultJsonSourceProvider : IJsonSourceProvider
     {
         private const string ConfEnv = "ConfEnv";
         private const string RootFolder = "RootFolder";
         private const string FileExtention = ".json";
-        private const string DefaultEnviroment = "default";
+        private const string DefaultEnviroment = "dev";
 
 
         private PathProvider.PathProvider PathProvider { get; set; }
@@ -24,8 +33,8 @@ namespace SimpleJsonConfig.Providers
         public DefaultJsonSourceProvider(PathProvider.PathProvider pathProvider)
         {
             this.PathProvider = pathProvider;
-
         }
+
 
         public DefaultJsonSourceProvider()
         {

@@ -32,6 +32,7 @@ namespace SimpleJsonConfig
         public ConfigReader(IJsonSourceProvider jsonSource)
         {
             this.jsonSourceProvider = jsonSource;
+            Trace.TraceInformation("Current IJsonSourceProvider: {0}", jsonSource.GetType().Name);
         }
 
         /// <summary>
@@ -64,7 +65,8 @@ namespace SimpleJsonConfig
                     return result;
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Trace.TraceError(ex.ToString());
                 throw;
             }
