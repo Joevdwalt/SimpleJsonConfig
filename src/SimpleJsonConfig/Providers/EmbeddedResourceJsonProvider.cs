@@ -33,7 +33,7 @@ namespace SimpleJsonConfig.Providers
         /// <returns></returns>
         public Stream GetJsonStream()
         {
-            var resourceName = String.Format("{0}.{1}", _nameSpace, _resourceName);
+            var resourceName = $"{_nameSpace}.{_resourceName}";
             var stream = _typeInAssembly.Assembly.GetManifestResourceStream(resourceName);
             return stream;
         }

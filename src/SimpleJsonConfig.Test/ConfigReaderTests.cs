@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SimpleJsonConfig.Test
@@ -12,6 +13,16 @@ namespace SimpleJsonConfig.Test
             var configReader = new ConfigReader();
             const string expectedValue = "TestValue";
             var actualValue = configReader.GetSetting<string>("TestKey");
+
+            Assert.AreEqual(expectedValue, actualValue);
+        }
+
+        [TestMethod]
+        public async Task GetSetting_NoEnviroment_TypeOfStringAsync()
+        {
+            var configReader = new ConfigReader();
+            const string expectedValue = "TestValue";
+            var actualValue = await configReader.GetSettingAsync<string>("TestKey");
 
             Assert.AreEqual(expectedValue, actualValue);
         }
@@ -77,7 +88,7 @@ namespace SimpleJsonConfig.Test
         {
             Environment.SetEnvironmentVariable("RootFolder", "Config");
             var configReader = new ConfigReader();
-            string expectedValue = "TestValueInCustomRootConfig";
+            const string expectedValue = "TestValueInCustomRootConfig";
             var actualValue = configReader.GetSetting<string>("TestKey");
 
             Assert.AreEqual(expectedValue, actualValue);

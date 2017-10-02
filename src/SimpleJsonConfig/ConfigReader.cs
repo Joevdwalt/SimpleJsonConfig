@@ -42,7 +42,7 @@ namespace SimpleJsonConfig
         {
             var stream = _jsonSourceProvider.GetJsonStream();
             if (stream == null) return default(T);
-            using (var streamReader = new StreamReader(_jsonSourceProvider.GetJsonStream()))
+            using (var streamReader = new StreamReader(stream))
             {
                 var jsonString = streamReader.ReadToEnd();
                 var jsonObject = JObject.Parse(jsonString);

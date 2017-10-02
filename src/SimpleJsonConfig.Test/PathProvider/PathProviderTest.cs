@@ -5,8 +5,7 @@ namespace SimpleJsonConfig.Test.PathProvider
     [TestClass]
     public class PathProviderTest
     {
-
-        SimpleJsonConfig.PathProvider.PathProvider PathProvider { get; set; }
+        private SimpleJsonConfig.PathProvider.PathProvider PathProvider { get; set; }
 
         public PathProviderTest()
         {
