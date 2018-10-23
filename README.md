@@ -6,19 +6,26 @@ version 1.0.0.6: Thanks to https://github.com/Programm3r the package now has the
 
 Also in this version is the ability to get settings async
 
-# TLDR;
+# How to Install
 
-1. Package-Install SimpleJsonConfig
-2. Use this code
+    Package-Install SimpleJsonConfig
 
+# Using the code
+
+```csharp
     var reader = new ConfigReader();
     var value = reader.GetSetting<string>
     ("Testing");
+```
 
-3. Create a folder default and add a file default.json. Set the poperty "Copy to Output Directory" to "Copy Always". This will copy the setting file to the root of your assembly everytime you compile. 
- 
+Create a folder default and add a file default.json
+
+```csharp 
     Example:
     {testing: "foo"}
+```
+
+Create a folder default and add a file default.json. Set the poperty "Copy to Output Directory" to "Copy Always". This will copy the setting file to the root of your assembly everytime you compile. 
 
 # Enviroments
 The Library uses a convention based method of determining where to look for config files. The default convention is to look in a folder called default that is located in the same directory as the excecuting binary. 
@@ -34,5 +41,7 @@ version 1.0.0.5: Added the ability to specify a root folder. If the environmenta
 
 version 1.0.0.6: Thanks to [Programm3r](https://github.com/Programm3r) the package now has the ability to read json configs from a web store. 
 
-Also in this version is the ability to get settings async.
+What's new
+version 1.0.0.5: Added the ability to specify a root folder. If the environmental varialbel called `RootFolder` is set the system will look for the other folders within this folder. This makes it easier to group config folders into a central group.
+
  

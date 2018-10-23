@@ -43,7 +43,6 @@ namespace SimpleJsonConfig
         /// <returns></returns>
         public T GetSetting<T>(string key)
         {
-            try
             {
                 var stream = jsonSourceProvider.GetJsonStream();
                 if (stream == null) return default(T);

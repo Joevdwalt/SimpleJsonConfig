@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -11,7 +9,10 @@ using System.Diagnostics;
 
 namespace SimpleJsonConfig.Providers
 {
-
+    /// <summary>
+    /// Default Json Source Provider Class
+    /// </summary>
+    /// <seealso cref="SimpleJsonConfig.Providers.IJsonSourceProvider" />
     /// <summary>
     /// The Env variables mentioned below do not need to be set. A default configution can be used. Just ensure you have a folder called dev in your bin directory with your config files.
     /// This class provides the default json source provider. Please note the env variables the class will look at are 
@@ -28,30 +29,70 @@ namespace SimpleJsonConfig.Providers
         private const string DefaultEnviroment = "dev";
 
 
+        /// <summary>
+        /// Gets or sets the path provider.
+        /// </summary>
+        /// <value>
+        /// The path provider.
+        /// </value>
         private PathProvider.PathProvider PathProvider { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultJsonSourceProvider"/> class.
+        /// </summary>
+        /// <param name="pathProvider">The path provider.</param>
         public DefaultJsonSourceProvider(PathProvider.PathProvider pathProvider)
         {
             this.PathProvider = pathProvider;
         }
-
 
         public DefaultJsonSourceProvider()
         {
             this.PathProvider = new PathProvider.PathProvider();
         }
 
-        public Stream GetJsonStream()
+        private static async Task<Stream> ReadAllFileAsync(string filename)
         {
-            // Look for default folder and dev or development folders
+            using (var file = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true))
+            {
+                var buff = new byte[file.Length];
+                await file.ReadAsync(buff, 0, (int)file.Length);
+                return new MemoryStream(buff);
+            }
+        }
+
+        /// <summary>
+        /// Gets the files from environment.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<string> GetFilesFromEnvironment()
+        {
+            // Look for default folder and development or development folders
             var environment = Environment.GetEnvironmentVariable(ConfEnv);
-            environment = String.IsNullOrEmpty(environment) ? DefaultEnviroment : environment;
+            environment = string.IsNullOrEmpty(environment) ? DefaultEnviroment : environment;
 
             var rootFolder = Environment.GetEnvironmentVariable(RootFolder);
             this.PathProvider.RootPath = rootFolder;
 
             var enviromentPath = environment.ToLower();
             var path = this.PathProvider.GetConfigPath(enviromentPath);
+
+            return !Directory.Exists(path) ? null : Directory.GetFiles(path);
+        }
+
+        /// <summary>
+        /// Gets the json stream.
+        /// </summary>
+        /// <returns></returns>
+        public Stream GetJsonStream()
+        {
+            var files = this.GetFilesFromEnvironment();
+            return (from file in files
+                    let extension = Path.GetExtension(file)
+                    where extension != null && extension.ToLower()
+                              .Equals(FileExtention.ToLower())
+                    select file).Select(File.OpenRead)
+                .FirstOrDefault();
 
             var streams = new List<Stream>();
 
@@ -83,9 +124,20 @@ namespace SimpleJsonConfig.Providers
             }
         }
 
-        public Task<Stream> GetJsonStreamAsync()
+        /// <summary>
+        /// Gets the json stream asynchronous.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Stream> GetJsonStreamAsync()
         {
-            throw new NotImplementedException();
+            var files = this.GetFilesFromEnvironment();
+            var query = from file in files
+                    let extension = Path.GetExtension(file)
+                    where extension != null && extension.ToLower()
+                              .Equals(FileExtention.ToLower())
+                    select file;
+
+            return await ReadAllFileAsync(query.FirstOrDefault());
         }
     }
 }

@@ -8,13 +8,7 @@ namespace SimpleJsonConfig.Test
     [TestClass]
     public class HttpClientSourceProviderTest
     {
-        public IJsonSourceProvider SourceProvider
-        {
-            get
-            {
-                return new HttpClientSourceProvider("http://jsonplaceholder.typicode.com/users/1", HttpMethod.Get);
-            }
-        }
+        public IJsonSourceProvider SourceProvider => new HttpClientSourceProvider("http://jsonplaceholder.typicode.com/users/1", HttpMethod.Get);
 
         [TestMethod]
         public async Task Http_Async_GetSetting_TypeOfString()
@@ -22,7 +16,7 @@ namespace SimpleJsonConfig.Test
             // arrange
             var configReader = new ConfigReader(this.SourceProvider);
             // act
-            var expectedValue = "Leanne Graham";
+            const string expectedValue = "Leanne Graham";
             var actualValue = await configReader.GetSettingAsync<string>("name");
             // assert
             Assert.AreEqual(expectedValue, actualValue);
@@ -65,7 +59,7 @@ namespace SimpleJsonConfig.Test
             var provider = new HttpClientSourceProvider("http://date.jsontest.com/", HttpMethod.Get);
             var configReader = new ConfigReader(this.SourceProvider);
             // act
-            var expectedValue = "Leanne Graham";
+            const string expectedValue = "Leanne Graham";
             var actualValue = configReader.GetSetting<string>("name");
             // assert
             Assert.AreEqual(expectedValue, actualValue);
