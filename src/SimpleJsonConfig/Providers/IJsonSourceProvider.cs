@@ -8,6 +8,7 @@ namespace SimpleJsonConfig.Providers
     /// </summary>
     public interface IJsonSourceProvider
     {
+       
         Stream GetJsonStream();
 
         Task<Stream> GetJsonStreamAsync();

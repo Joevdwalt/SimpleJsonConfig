@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SimpleJsonConfig.Providers;
+using System.Diagnostics;
+using System;
 
 namespace SimpleJsonConfig
 {
@@ -13,23 +15,24 @@ namespace SimpleJsonConfig
         /// <summary>
         /// The json source provider
         /// </summary>
-        private readonly IJsonSourceProvider _jsonSourceProvider;
+        private readonly IJsonSourceProvider jsonSourceProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigReader"/> class.
         /// </summary>
         public ConfigReader()
         {
-            this._jsonSourceProvider = new DefaultJsonSourceProvider();
+            this.jsonSourceProvider = new DefaultJsonSourceProvider();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigReader"/> class.
         /// </summary>
         /// <param name="_jsonSource">The _json source.</param>
-        public ConfigReader(IJsonSourceProvider _jsonSource)
+        public ConfigReader(IJsonSourceProvider jsonSource)
         {
-            this._jsonSourceProvider = _jsonSource;
+            this.jsonSourceProvider = jsonSource;
+            Trace.TraceInformation("Current IJsonSourceProvider: {0}", jsonSource.GetType().Name);
         }
 
         /// <summary>
@@ -40,22 +43,31 @@ namespace SimpleJsonConfig
         /// <returns></returns>
         public T GetSetting<T>(string key)
         {
-            var stream = _jsonSourceProvider.GetJsonStream();
-            if (stream == null) return default(T);
-            using (var streamReader = new StreamReader(stream))
             {
-                var jsonString = streamReader.ReadToEnd();
-                var jsonObject = JObject.Parse(jsonString);
-                var token = jsonObject.SelectToken(key);
-                var result = default(T);
-
-                if (token != null)
+                var stream = jsonSourceProvider.GetJsonStream();
+                if (stream == null) return default(T);
+                using (var streamReader = new StreamReader(jsonSourceProvider.GetJsonStream()))
                 {
-                    result = jsonObject.SelectToken(key).ToObject<T>();
-                }
+                    var jsonString = streamReader.ReadToEnd();
 
-                streamReader.Close();
-                return result;
+                    Trace.TraceInformation("Reading value for key: {0}", key);
+                    var jsonObject = JObject.Parse(jsonString);
+                    var token = jsonObject.SelectToken(key);
+                    var result = default(T);
+
+                    if (token != null)
+                    {
+                        result = jsonObject.SelectToken(key).ToObject<T>();
+                    }
+
+                    streamReader.Close();
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.ToString());
+                throw;
             }
         }
 
@@ -67,7 +79,7 @@ namespace SimpleJsonConfig
         /// <returns></returns>
         public async Task<T> GetSettingAsync<T>(string key)
         {
-            var stream = await this._jsonSourceProvider.GetJsonStreamAsync();
+            var stream = await this.jsonSourceProvider.GetJsonStreamAsync();
             if (stream == null || stream == Stream.Null) return default(T);
 
             using (var streamReader = new StreamReader(stream))

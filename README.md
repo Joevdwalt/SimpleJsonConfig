@@ -1,8 +1,10 @@
 # SimpleJsonConfig
 A minimal C# library for managing json config files in the .net framework.
 
-# What's new 
-Thanks to FrikkenLazer for contributing the feature to read configuration from and embedded resource. This feauture is now availible in version 1.0.0.4
+# Whats new 
+version 1.0.0.6: Thanks to https://github.com/Programm3r the package now has the ability to read json configs from a web store. 
+
+Also in this version is the ability to get settings async
 
 # How to Install
 
@@ -18,21 +20,28 @@ Thanks to FrikkenLazer for contributing the feature to read configuration from a
 
 Create a folder default and add a file default.json
 
-```csharp
+```csharp 
     Example:
     {testing: "foo"}
 ```
+
+Create a folder default and add a file default.json. Set the poperty "Copy to Output Directory" to "Copy Always". This will copy the setting file to the root of your assembly everytime you compile. 
 
 # Enviroments
 The Library uses a convention based method of determining where to look for config files. The default convention is to look in a folder called default that is located in the same directory as the excecuting binary. 
 
 However the idea is to have different configurations for you different environments. This is achieved in 2 ways. 
 
-1. By calling GetSettings with the enviroment variable set. This will look for n folder of the same name and scan for any .json files in this directory. It will then look for the key in all of those files. 
-2. By setting the enviroment variable ConfEnv. This is the preferred way. In azure you would need to set this value once int he Application settings. 
+1. By calling GetSettings with the environmentvariable set. This will look for n folder of the same name and scan for any .json files in this directory. It will then look for the key in all of those files. 
+2. By setting the environmentvariable ConfEnv. This is the preferred way. In azure you would need to set this value once int he Application settings. 
 
 
+# Versions
+version 1.0.0.5: Added the ability to specify a root folder. If the environmental variable called "RootFolder" is set the system will look for the other folders within this folder. This makes it easier to group config folders into a central group.
+
+version 1.0.0.6: Thanks to [Programm3r](https://github.com/Programm3r) the package now has the ability to read json configs from a web store. 
 
 What's new
 version 1.0.0.5: Added the ability to specify a root folder. If the environmental varialbel called `RootFolder` is set the system will look for the other folders within this folder. This makes it easier to group config folders into a central group.
+
  

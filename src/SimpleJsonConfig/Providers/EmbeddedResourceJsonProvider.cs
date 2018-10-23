@@ -13,6 +13,11 @@ namespace SimpleJsonConfig.Providers
         private readonly string _nameSpace;
         private readonly string _resourceName;
 
+        public string ProviderName
+        {
+            get;private set;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbeddedResourceJsonProvider"/> class.
         /// </summary>
@@ -24,6 +29,7 @@ namespace SimpleJsonConfig.Providers
             _resourceName = resourceName;
             _nameSpace = nameSpace;
             _typeInAssembly = typeInAssembly;
+            
         }
 
         /// <summary>
